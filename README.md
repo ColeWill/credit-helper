@@ -1,59 +1,48 @@
-# CreditHelper
+# Credit Helper
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.4.
+A web application that guides users through the 7-step credit repair process. It provides step-by-step instructions, generates pre-filled dispute letters for the three major credit bureaus (Experian, TransUnion, Equifax), and tracks your progress through the entire repair workflow.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Authentication** — Email/password and Google sign-in via Firebase Auth
+- **Progress Tracking** — Timeline dashboard showing status of all 7 steps
+- **Dispute Management** — Add and track individual dispute items per bureau with 30-day countdown timers
+- **Letter Generation** — Pre-filled dispute letters (Round 1, Follow-up, Reinvestigation, Escalation, Personal Info Update) ready to print or copy
+- **Secondary Bureau Checklist** — Track security freezes across 9 secondary reporting agencies
+- **Encrypted Storage** — SSN encrypted with AES-GCM via Web Crypto API before being stored in Firestore
 
-```bash
-ng serve
-```
+## Prerequisites
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Node.js 18+
+- A Firebase project with **Firestore** and **Authentication** (Email/Password + Google) enabled
 
-## Code scaffolding
+## Setup
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1. Clone the repo and install dependencies:
+   ```bash
+   npm install
+   ```
 
-```bash
-ng generate component component-name
-```
+2. Copy the environment template and fill in your Firebase config:
+   ```bash
+   cp src/environments/environment.template.ts src/environments/environment.ts
+   ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Commands
 
-```bash
-ng generate --help
-```
+| Command | Description |
+|---|---|
+| `npm start` | Start the dev server at `http://localhost:4200` |
+| `npm run build` | Production build (output to `dist/`) |
+| `npm test` | Run unit tests with Karma/Jasmine |
+| `npm run e2e` | Run Playwright E2E tests (requires dev server running) |
 
-## Building
+## The 7-Step Credit Repair Process
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+1. **Freeze Secondary Credit Bureaus** — Freeze files with LexisNexis, Innovis, Teletrack, and others
+2. **Pull Your Credit Reports** — Obtain reports from all three major bureaus
+3. **Update Personal Information** — Send a Personal Info Update Letter to each bureau
+4. **Send Round 1 Dispute Letters** — Demand verification under FCRA Section 609(a)(1)(A)
+5. **Send via Certified Mail** — Use Certified Mail with Return Receipt for all correspondence
+6. **Handle Specific Negative Items** — Tailored letters for collections, medical debt, late payments, and hard inquiries
+7. **Follow Up and Escalate** — Track 30-day windows and escalate non-compliant bureaus

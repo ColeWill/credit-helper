@@ -1,3 +1,6 @@
+import { TestBed } from '@angular/core/testing';
+import { Firestore } from '@angular/fire/firestore';
+import { Auth } from '@angular/fire/auth';
 import { FollowUpService } from './follow-up.service';
 import { Dispute } from '../models';
 import { Timestamp } from '@angular/fire/firestore';
@@ -6,9 +9,14 @@ describe('FollowUpService', () => {
   let service: FollowUpService;
 
   beforeEach(() => {
-    service = new (FollowUpService as any)();
-    (service as any).firestore = {};
-    (service as any).auth = { uid: 'test-uid' };
+    TestBed.configureTestingModule({
+      providers: [
+        FollowUpService,
+        { provide: Firestore, useValue: {} },
+        { provide: Auth, useValue: { onAuthStateChanged: () => () => {} } },
+      ],
+    });
+    service = TestBed.inject(FollowUpService);
   });
 
   describe('isOverdue', () => {
@@ -38,17 +46,23 @@ describe('FollowUpService', () => {
   describe('canFollowUp', () => {
     it('returns true for overdue sent dispute', () => {
       const past = Timestamp.fromDate(new Date(Date.now() - 1000));
-      expect(service.canFollowUp({ status: 'sent', dueAt: past } as Dispute)).toBeTrue();
+      expect(
+        service.canFollowUp({ status: 'sent', dueAt: past } as Dispute),
+      ).toBeTrue();
     });
 
     it('returns false for non-overdue sent dispute', () => {
       const future = Timestamp.fromDate(new Date(Date.now() + 1000000));
-      expect(service.canFollowUp({ status: 'sent', dueAt: future } as Dispute)).toBeFalse();
+      expect(
+        service.canFollowUp({ status: 'sent', dueAt: future } as Dispute),
+      ).toBeFalse();
     });
 
     it('returns false for responded dispute even if overdue', () => {
       const past = Timestamp.fromDate(new Date(Date.now() - 1000));
-      expect(service.canFollowUp({ status: 'responded', dueAt: past } as Dispute)).toBeFalse();
+      expect(
+        service.canFollowUp({ status: 'responded', dueAt: past } as Dispute),
+      ).toBeFalse();
     });
   });
 });

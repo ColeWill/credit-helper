@@ -1,0 +1,10 @@
+#!/bin/sh
+echo "Running pre-push checks..."
+
+echo "→ Building..."
+npm run build -- --configuration development || { echo "Build failed. Push aborted."; exit 1; }
+
+echo "→ Running unit tests..."
+npm run test:ci || { echo "Unit tests failed. Push aborted."; exit 1; }
+
+echo "✓ All checks passed."

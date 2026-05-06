@@ -1,13 +1,14 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { Auth, user } from '@angular/fire/auth';
+import { AuthService } from './auth.service';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { map, take } from 'rxjs';
 
 export const authGuard: CanActivateFn = () => {
-  const auth = inject(Auth);
+  const auth = inject(AuthService);
   const router = inject(Router);
-  return user(auth).pipe(
+  return toObservable(auth.currentUser).pipe(
     take(1),
-    map(u => (u ? true : router.createUrlTree(['/login'])))
+    map((u) => (u ? true : router.createUrlTree(['/login']))),
   );
 };

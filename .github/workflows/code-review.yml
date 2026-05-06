@@ -1,0 +1,52 @@
+name: Code Review Checklist
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  checklist:
+    name: Post review checklist
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.payload.pull_request.head.ref;
+            const validPrefix = /^(feature|fix|chore|refactor|test|docs)\//.test(branch);
+
+            const body = `## PR Review Checklist
+
+            Please verify the following before merging:
+
+            - [${validPrefix ? 'x' : ' '}] Branch name follows convention (\`feature/\`, \`fix/\`, \`chore/\`, \`refactor/\`)  ${validPrefix ? '✅' : `❌ Current branch: \`${branch}\``}
+            - [ ] Conventional commit messages used (\`feat:\`, \`fix:\`, \`chore:\`, etc.)
+            - [ ] Unit tests added or updated for any changed service logic
+            - [ ] Build passes (check the \`build\` status check below)
+            - [ ] \`src/environments/environment.ts\` is **not** included in this PR
+            - [ ] PR description explains what changed and how to test it
+
+            ---
+            _This checklist is posted automatically. Check off items as you verify them._`;
+
+            // Only post once — check if we already commented
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+            });
+
+            const existing = comments.data.find(c =>
+              c.user.login === 'github-actions[bot]' && c.body.includes('PR Review Checklist')
+            );
+
+            if (!existing) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body,
+              });
+            }

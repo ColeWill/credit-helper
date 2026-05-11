@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- envelope body -->
+  <rect x="2" y="7" width="28" height="20" rx="3" fill="#1a73e8"/>
+  <!-- envelope flap V -->
+  <path d="M2 10l14 9 14-9" stroke="white" stroke-width="2" fill="none"/>
+  <!-- green checkmark circle -->
+  <circle cx="23" cy="22" r="7" fill="#34a853"/>
+  <path d="M19.5 22l2.5 2.5 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Credit Helper — Home</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a73e8;
+      --blue-dark: #1558b0;
+      --green: #34a853;
+      --red: #ea4335;
+      --yellow: #fbbc04;
+      --gray-50: #f8f9fa;
+      --gray-100: #f1f3f4;
+      --gray-200: #e8eaed;
+      --gray-400: #bdc1c6;
+      --gray-600: #80868b;
+      --gray-800: #3c4043;
+      --gray-900: #202124;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--gray-900);
+      background: white;
+      line-height: 1.5;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .nav-logo .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a { color: var(--gray-800); font-size: .9rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .55rem 1.25rem;
+      border-radius: 6px;
+      font-size: .9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background .15s, box-shadow .15s;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--blue-dark); text-decoration: none; }
+
+    .btn-outline {
+      background: white;
+      color: var(--blue);
+      border: 1.5px solid var(--blue);
+    }
+    .btn-outline:hover { background: #e8f0fe; text-decoration: none; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #e8f0fe 0%, #f0f7ff 50%, #e6f4ea 100%);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      padding: .3rem .9rem;
+      font-size: .8rem;
+      color: var(--gray-600);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--gray-900);
+      max-width: 700px;
+      margin: 0 auto 1.25rem;
+    }
+
+    .hero h1 span { color: var(--blue); }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--gray-600);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero-cta .btn { padding: .75rem 1.75rem; font-size: 1rem; }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 3.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.75rem; font-weight: 800; color: var(--gray-900); }
+    .stat-label { font-size: .8rem; color: var(--gray-600); margin-top: .15rem; }
+
+    /* ── SECTION WRAPPER ── */
+    .section { padding: 4rem 2rem; }
+    .section-inner { max-width: 1000px; margin: 0 auto; }
+    .section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: .5rem;
+    }
+    .section-title {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 700;
+      margin-bottom: .75rem;
+    }
+    .section-sub {
+      color: var(--gray-600);
+      max-width: 540px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .step-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-weight: 700;
+      font-size: .9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .step-card h3 { font-size: 1rem; margin-bottom: .4rem; }
+    .step-card p { font-size: .875rem; color: var(--gray-600); }
+
+    .step-card.highlight {
+      border-color: var(--blue);
+      background: #f0f7ff;
+    }
+
+    /* ── LOCKED STEPS ── */
+    .step-card.step-locked {
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .locked-title {
+      height: 1.25rem;
+      margin-bottom: .75rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .locked-title span {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      filter: blur(5px);
+      display: block;
+    }
+
+    /* fade-out overlay on the title */
+    .locked-title::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 30%, white 85%);
+    }
+
+    .step-card.highlight .locked-title::after {
+      background: linear-gradient(to right, transparent 30%, #f0f7ff 85%);
+    }
+
+    .locked-lines {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+
+    .locked-line {
+      height: 10px;
+      background: var(--gray-200);
+      border-radius: 4px;
+    }
+
+    .lock-badge {
+      position: absolute;
+      top: .75rem;
+      right: .75rem;
+      font-size: .7rem;
+      font-weight: 600;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      padding: .2rem .5rem;
+      border-radius: 10px;
+      border: 1px solid var(--gray-200);
+    }
+
+    /* ── FEATURES ── */
+    .features-section { background: var(--gray-50); }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .feature-icon {
+      font-size: 1.75rem;
+      margin-bottom: .75rem;
+    }
+
+    .feature-card h3 { font-size: 1rem; margin-bottom: .4rem; }
+    .feature-card p { font-size: .875rem; color: var(--gray-600); }
+
+    /* ── DASHBOARD PREVIEW ── */
+    .preview-section { background: white; }
+
+    .preview-wrapper {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 1.5rem;
+      overflow: hidden;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .preview-header h2 { font-size: 1.1rem; }
+
+    .progress-bar-wrap { margin-bottom: 1.5rem; }
+    .progress-label { display: flex; justify-content: space-between; font-size: .8rem; color: var(--gray-600); margin-bottom: .4rem; }
+    .progress-track { height: 8px; background: var(--gray-200); border-radius: 4px; }
+    .progress-fill { height: 100%; border-radius: 4px; background: var(--green); }
+
+    .timeline-preview { display: flex; flex-direction: column; gap: .75rem; }
+
+    .tl-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: .875rem 1rem;
+    }
+
+    .tl-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .tl-dot.complete { background: var(--green); color: white; }
+    .tl-dot.in-progress { background: var(--blue); color: white; }
+    .tl-dot.pending { background: var(--gray-200); color: var(--gray-600); }
+
+    .tl-body { flex: 1; }
+    .tl-title { font-size: .9rem; font-weight: 600; margin-bottom: .15rem; }
+    .tl-desc { font-size: .8rem; color: var(--gray-600); }
+
+    .tl-badge {
+      font-size: .7rem;
+      font-weight: 600;
+      padding: .15rem .5rem;
+      border-radius: 10px;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    .tl-badge.complete { background: #e6f4ea; color: var(--green); }
+    .tl-badge.in-progress { background: #e8f0fe; color: var(--blue); }
+    .tl-badge.pending { background: var(--gray-100); color: var(--gray-600); }
+
+    /* ── SECURITY ── */
+    .security-section { background: var(--gray-50); }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (max-width: 640px) {
+      .security-grid { grid-template-columns: 1fr; }
+    }
+
+    .security-points { display: flex; flex-direction: column; gap: 1rem; }
+
+    .security-point {
+      display: flex;
+      gap: .75rem;
+      align-items: flex-start;
+    }
+
+    .security-point .icon {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      margin-top: .1rem;
+    }
+
+    .security-point h4 { font-size: .95rem; margin-bottom: .2rem; }
+    .security-point p { font-size: .85rem; color: var(--gray-600); }
+
+    .security-visual {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .security-visual h4 { font-size: .85rem; color: var(--gray-600); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: .05em; }
+
+    .bureau-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .6rem 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .bureau-row:last-child { border-bottom: none; }
+
+    .bureau-name { font-size: .9rem; font-weight: 500; }
+
+    .bureau-status {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .8rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-dot.frozen { background: var(--green); }
+    .status-dot.pending { background: var(--yellow); }
+    .status-dot.open { background: var(--gray-400); }
+
+    /* ── CTA BANNER ── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--blue) 0%, #1558b0 100%);
+      padding: 4rem 2rem;
+      text-align: center;
+      color: white;
+    }
+
+    .cta-section h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; margin-bottom: .75rem; }
+    .cta-section p { opacity: .85; max-width: 480px; margin: 0 auto 2rem; }
+
+    .cta-section .btn-primary {
+      background: white;
+      color: var(--blue);
+      font-size: 1rem;
+      padding: .75rem 2rem;
+    }
+
+    .cta-section .btn-primary:hover { background: var(--gray-100); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--gray-900);
+      color: var(--gray-400);
+      padding: 2rem;
+      text-align: center;
+      font-size: .85rem;
+    }
+
+    footer a { color: var(--gray-400); }
+    footer a:hover { color: white; }
+
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: .75rem; flex-wrap: wrap; }
+
+    /* ── FEATURE LOCKED ── */
+    .feature-card.feature-locked { position: relative; }
+    .feature-card.feature-locked .lock-badge { position: absolute; top: .75rem; right: .75rem; }
+    .feature-card.feature-locked .locked-lines { margin-top: .5rem; }
+
+    /* ── PREVIEW LOCKED ── */
+    .preview-wrapper.preview-locked { position: relative; }
+
+    .preview-blur-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 30%, rgba(248,249,250,.97) 75%);
+      border-radius: 16px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .preview-lock-cta {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
+      white-space: nowrap;
+      font-size: .9rem;
+    }
+
+    /* ── LOCKED SUB ── */
+    .locked-inline {
+      filter: blur(4px);
+      user-select: none;
+    }
+
+    /* ── LOCKED STATUS ── */
+    .locked-status { align-items: center; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <div class="logo-icon">✦</div>
+      Credit Helper
+    </div>
+    <div class="nav-links">
+      <a href="#">How It Works</a>
+      <a href="#">Features</a>
+      <a href="#" class="btn btn-outline">Sign In</a>
+      <a href="#" class="btn btn-primary">Get Started Free</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Proven system · Step-by-step guidance
+    </div>
+    <h1>Fix Your Credit with a <span>Proven 7-Step System</span></h1>
+    <p>
+      A guided, step-by-step system that takes the guesswork out of credit repair and keeps you on track from start to finish.
+    </p>
+    <div class="hero-cta">
+      <a href="#" class="btn btn-primary">Get Access →</a>
+      <a href="#" class="btn btn-outline">See How It Works</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-value">7</div>
+        <div class="stat-label">Guided Steps</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">3</div>
+        <div class="stat-label">Major Bureaus</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">9</div>
+        <div class="stat-label">Secondary Agencies</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">5+</div>
+        <div class="stat-label">Letter Templates</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-label">The Process</div>
+      <h2 class="section-title">7 Steps to a Cleaner Credit Report</h2>
+      <p class="section-sub">
+        The full 7-step process is available to members. Sign up to unlock every step, letter template, and tracking tool.
+      </p>
+      <div class="steps-grid">
+
+        <!-- Step 1 — fully visible -->
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Freeze Secondary Bureaus</h3>
+          <p>Lock your file with LexisNexis, Innovis, Teletrack, and 6 other agencies before disputing.</p>
+        </div>
+
+        <!-- Steps 2–7 — locked -->
+        <div class="step-card step-locked">
+          <div class="step-number">2</div>
+          <div class="locked-title"><span>Members Only</span></div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:90%"></div>
+            <div class="locked-line" style="width:75%"></div>
+          </div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+
+        <div class="step-card step-locked">
+          <div class="step-number">3</div>
+          <div class="locked-title"><span>Members Only</span></div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:85%"></div>
+            <div class="locked-line" style="width:60%"></div>
+          </div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+
+        <div class="step-card step-locked highlight">
+          <div class="step-number">4</div>
+          <div class="locked-title"><span>Members Only</span></div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:95%"></div>
+            <div class="locked-line" style="width:70%"></div>
+          </div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+
+        <div class="step-card step-locked">
+          <div class="step-number">5</div>
+          <div class="locked-title"><span>Members Only</span></div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:80%"></div>
+            <div class="locked-line" style="width:65%"></div>
+          </div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+
+        <div class="step-card step-locked">
+          <div class="step-number">6</div>
+          <div class="locked-title"><span>Members Only</span></div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:88%"></div>
+            <div class="locked-line" style="width:55%"></div>
+          </div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+
+        <div class="step-card step-locked">
+          <div class="step-number">7</div>
+          <div class="locked-title"><span>Members Only</span></div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:92%"></div>
+            <div class="locked-line" style="width:68%"></div>
+          </div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section features-section">
+    <div class="section-inner">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Everything You Need in One Place</h2>
+      <p class="section-sub">No spreadsheets, no guessing. Credit Helper keeps you organized from start to finish.</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Progress Tracking</h3>
+          <p>A visual timeline dashboard shows exactly where you are in the 7-step process and what to do next.</p>
+        </div>
+        <div class="feature-card feature-locked">
+          <div class="feature-icon">✉️</div>
+          <h3>Auto-Generated Letters</h3>
+          <div class="locked-lines"><div class="locked-line" style="width:95%"></div><div class="locked-line" style="width:72%"></div><div class="locked-line" style="width:60%"></div></div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+        <div class="feature-card feature-locked">
+          <div class="feature-icon">⏱️</div>
+          <h3>30-Day Countdown Timers</h3>
+          <div class="locked-lines"><div class="locked-line" style="width:88%"></div><div class="locked-line" style="width:65%"></div><div class="locked-line" style="width:50%"></div></div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+        <div class="feature-card feature-locked">
+          <div class="feature-icon">🔒</div>
+          <h3>Encrypted Storage</h3>
+          <div class="locked-lines"><div class="locked-line" style="width:92%"></div><div class="locked-line" style="width:78%"></div><div class="locked-line" style="width:55%"></div></div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+        <div class="feature-card feature-locked">
+          <div class="feature-icon">🏦</div>
+          <h3>Secondary Bureau Checklist</h3>
+          <div class="locked-lines"><div class="locked-line" style="width:90%"></div><div class="locked-line" style="width:68%"></div><div class="locked-line" style="width:45%"></div></div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+        <div class="feature-card feature-locked">
+          <div class="feature-icon">🖨️</div>
+          <h3>Print-Ready Letters</h3>
+          <div class="locked-lines"><div class="locked-line" style="width:85%"></div><div class="locked-line" style="width:70%"></div><div class="locked-line" style="width:52%"></div></div>
+          <div class="lock-badge">🔒 Members Only</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD PREVIEW -->
+  <section class="section preview-section">
+    <div class="section-inner">
+      <div class="section-label">Dashboard Preview</div>
+      <h2 class="section-title">Your Progress at a Glance</h2>
+      <p class="section-sub locked-sub">
+        <span class="locked-inline">The dashboard shows every step, its status, and open disputes — all in one view.</span>
+      </p>
+
+      <div class="preview-wrapper preview-locked">
+        <div class="preview-blur-overlay"></div>
+        <div class="preview-header">
+          <h2>Credit Repair Dashboard</h2>
+          <div style="display:flex;gap:.75rem;align-items:center;">
+            <a href="#" style="font-size:.85rem;">Edit Profile</a>
+            <button style="padding:.35rem .85rem;border:1px solid #ccc;border-radius:4px;background:white;font-size:.85rem;cursor:pointer;">Sign Out</button>
+          </div>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-label">
+            <span>3 / 7 steps complete</span>
+            <span style="color:var(--green);font-weight:600;">43%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" style="width:43%"></div>
+          </div>
+        </div>
+
+        <div class="timeline-preview">
+          <div class="tl-item">
+            <div class="tl-dot complete">✓</div>
+            <div class="tl-body">
+              <div class="tl-title">Step 1 — Freeze Secondary Bureaus</div>
+              <div class="tl-desc">Completed May 2, 2025</div>
+            </div>
+            <span class="tl-badge complete">Complete</span>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot complete">✓</div>
+            <div class="tl-body">
+              <div class="tl-title">Step 2 — Pull Credit Reports</div>
+              <div class="tl-desc">Completed May 3, 2025</div>
+            </div>
+            <span class="tl-badge complete">Complete</span>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot complete">✓</div>
+            <div class="tl-body">
+              <div class="tl-title">Step 3 — Update Personal Information</div>
+              <div class="tl-desc">Completed May 4, 2025</div>
+            </div>
+            <span class="tl-badge complete">Complete</span>
+          </div>
+          <div class="tl-item" style="border-color:var(--blue);">
+            <div class="tl-dot in-progress">4</div>
+            <div class="tl-body">
+              <div class="tl-title">Step 4 — Send Round 1 Dispute Letters</div>
+              <div class="tl-desc" style="color:var(--red);">3 open disputes · 18 days remaining</div>
+            </div>
+            <span class="tl-badge in-progress">In Progress</span>
+          </div>
+          <div class="tl-item" style="opacity:.6;">
+            <div class="tl-dot pending">5</div>
+            <div class="tl-body">
+              <div class="tl-title">Step 5 — Send via Certified Mail</div>
+              <div class="tl-desc">Not started</div>
+            </div>
+            <span class="tl-badge pending">Not Started</span>
+          </div>
+        </div>
+        <div class="preview-lock-cta">
+          <span>🔒</span>
+          <strong>Members Only</strong>
+          <a href="#" class="btn btn-primary" style="padding:.5rem 1.25rem;font-size:.85rem;">Get Access →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY -->
+  <section class="section security-section">
+    <div class="section-inner">
+      <div class="security-grid">
+        <div>
+          <div class="section-label">Security &amp; Privacy</div>
+          <h2 class="section-title">Your Data Stays Yours</h2>
+          <div class="security-points">
+            <div class="security-point">
+              <div class="icon">🔐</div>
+              <div>
+                <h4>AES-GCM Encryption</h4>
+                <p>Your SSN is encrypted in the browser using the Web Crypto API before it ever leaves your device.</p>
+              </div>
+            </div>
+            <div class="security-point">
+              <div class="icon">🔑</div>
+              <div>
+                <h4>Firebase Authentication</h4>
+                <p>Sign in with email/password or Google. Your account is protected by Firebase's battle-tested auth.</p>
+              </div>
+            </div>
+            <div class="security-point">
+              <div class="icon">🛡️</div>
+              <div>
+                <h4>Firestore Security Rules</h4>
+                <p>Your data is locked to your account. No other user can read or write your records.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="security-visual">
+          <h4 style="font-size:.85rem;color:var(--gray-600);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.05em;">Secondary Bureau Freeze Status</h4>
+          <div class="bureau-row">
+            <span class="bureau-name">LexisNexis</span>
+            <div class="bureau-status locked-status"><div class="locked-line" style="width:52px;height:8px;border-radius:4px;"></div></div>
+          </div>
+          <div class="bureau-row">
+            <span class="bureau-name">Innovis</span>
+            <div class="bureau-status locked-status"><div class="locked-line" style="width:44px;height:8px;border-radius:4px;"></div></div>
+          </div>
+          <div class="bureau-row">
+            <span class="bureau-name">Teletrack</span>
+            <div class="bureau-status locked-status"><div class="locked-line" style="width:48px;height:8px;border-radius:4px;"></div></div>
+          </div>
+          <div class="bureau-row">
+            <span class="bureau-name">ChexSystems</span>
+            <div class="bureau-status locked-status"><div class="locked-line" style="width:52px;height:8px;border-radius:4px;"></div></div>
+          </div>
+          <div class="bureau-row">
+            <span class="bureau-name">NCTUE</span>
+            <div class="bureau-status locked-status"><div class="locked-line" style="width:60px;height:8px;border-radius:4px;"></div></div>
+          </div>
+          <div class="bureau-row">
+            <span class="bureau-name">SageStream</span>
+            <div class="bureau-status locked-status"><div class="locked-line" style="width:60px;height:8px;border-radius:4px;"></div></div>
+          </div>
+          <div style="margin-top:1rem;text-align:center;">
+            <span style="font-size:.75rem;color:var(--gray-600);">🔒 Status visible to members</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta-section">
+    <h2>Ready to Start Repairing Your Credit?</h2>
+    <p>Get access to all 7 steps, letter templates, dispute tracking, and more.</p>
+    <a href="#" class="btn btn-primary">Get Access →</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">How It Works</a>
+      <a href="#">Sign In</a>
+    </div>
+    <p>© 2025 Credit Helper. Not affiliated with any credit bureau or financial institution.</p>
+  </footer>
+
+</body>
+</html>

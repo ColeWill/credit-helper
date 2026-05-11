@@ -1,15 +1,23 @@
 # Credit Helper
 
-A web application that guides users through the 7-step credit repair process. It provides step-by-step instructions, generates pre-filled dispute letters for the three major credit bureaus (Experian, TransUnion, Equifax), and tracks your progress through the entire repair workflow.
+A full-stack Angular web application for guided credit repair. Users follow a structured multi-step workflow with progress tracking, document generation, and deadline management.
 
 ## Features
 
 - **Authentication** — Email/password and Google sign-in via Firebase Auth
-- **Progress Tracking** — Timeline dashboard showing status of all 7 steps
-- **Dispute Management** — Add and track individual dispute items per bureau with 30-day countdown timers
-- **Letter Generation** — Pre-filled dispute letters (Round 1, Follow-up, Reinvestigation, Escalation, Personal Info Update) ready to print or copy
-- **Secondary Bureau Checklist** — Track security freezes across 9 secondary reporting agencies
-- **Encrypted Storage** — SSN encrypted with AES-GCM via Web Crypto API before being stored in Firestore
+- **Progress Tracking** — Timeline dashboard showing status across all steps
+- **Dispute Management** — Add and track dispute items per bureau with countdown timers
+- **Letter Generation** — Auto-generated letters ready to print or copy
+- **Secondary Bureau Checklist** — Track freeze status across secondary reporting agencies
+- **Encrypted Storage** — Sensitive data encrypted with AES-GCM via Web Crypto API before being stored in Firestore
+
+## Tech Stack
+
+- Angular 19 (standalone components, signals)
+- Firebase (Firestore, Authentication)
+- Playwright (E2E tests)
+- Karma/Jasmine (unit tests)
+- Vercel (deployment)
 
 ## Prerequisites
 
@@ -37,12 +45,6 @@ A web application that guides users through the 7-step credit repair process. It
 | `npm test` | Run unit tests with Karma/Jasmine |
 | `npm run e2e` | Run Playwright E2E tests (requires dev server running) |
 
-## The 7-Step Credit Repair Process
+## UI Mockups
 
-1. **Freeze Secondary Credit Bureaus** — Freeze files with LexisNexis, Innovis, Teletrack, and others
-2. **Pull Your Credit Reports** — Obtain reports from all three major bureaus
-3. **Update Personal Information** — Send a Personal Info Update Letter to each bureau
-4. **Send Round 1 Dispute Letters** — Demand verification under FCRA Section 609(a)(1)(A)
-5. **Send via Certified Mail** — Use Certified Mail with Return Receipt for all correspondence
-6. **Handle Specific Negative Items** — Tailored letters for collections, medical debt, late payments, and hard inquiries
-7. **Follow Up and Escalate** — Track 30-day windows and escalate non-compliant bureaus
+Static HTML mockups are in `ui-designs/` and can be opened directly in a browser.

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Credit Helper — Step 6: Handle Specific Negative Items</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a73e8;
+      --blue-dark: #1558b0;
+      --green: #34a853;
+      --red: #ea4335;
+      --yellow: #fbbc04;
+      --gray-50: #f8f9fa;
+      --gray-100: #f1f3f4;
+      --gray-200: #e8eaed;
+      --gray-400: #bdc1c6;
+      --gray-600: #80868b;
+      --gray-800: #3c4043;
+      --gray-900: #202124;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--gray-900);
+      background: white;
+      line-height: 1.5;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .nav-logo .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a { color: var(--gray-800); font-size: .9rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .55rem 1.25rem;
+      border-radius: 6px;
+      font-size: .9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background .15s, box-shadow .15s;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--blue-dark); text-decoration: none; }
+
+    .btn-outline {
+      background: white;
+      color: var(--blue);
+      border: 1.5px solid var(--blue);
+    }
+    .btn-outline:hover { background: #e8f0fe; text-decoration: none; }
+
+    .btn:disabled, .btn[disabled] {
+      background: var(--gray-200);
+      color: var(--gray-600);
+      cursor: not-allowed;
+      border-color: var(--gray-200);
+    }
+
+    /* MAIN CONTENT */
+    .page-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .85rem;
+      color: var(--gray-600);
+      margin-bottom: 1.75rem;
+    }
+
+    .breadcrumb a { color: var(--gray-600); }
+    .breadcrumb a:hover { color: var(--blue); }
+    .breadcrumb .sep { color: var(--gray-400); }
+    .breadcrumb .current { color: var(--gray-900); font-weight: 500; }
+
+    /* STEP HEADER */
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-pill {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-header-text { flex: 1; }
+    .step-header-text h1 { font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
+
+    .status-badge {
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .25rem .65rem;
+      border-radius: 10px;
+      background: var(--gray-100);
+      color: var(--gray-600);
+      border: 1px solid var(--gray-200);
+      white-space: nowrap;
+    }
+
+    /* DETAIL CARD */
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card p { color: var(--gray-800); font-size: .95rem; margin-bottom: .75rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    .detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      margin-top: .25rem;
+    }
+
+    .detail-item {
+      font-size: .875rem;
+      color: var(--gray-600);
+      display: flex;
+      gap: .5rem;
+    }
+
+    .detail-item::before {
+      content: '·';
+      color: var(--blue);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: .75rem;
+    }
+
+    /* LETTER CARDS GRID */
+    .letter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    @media (max-width: 600px) {
+      .letter-grid { grid-template-columns: 1fr; }
+      .step-header { gap: .75rem; }
+      .step-header-text h1 { font-size: 1.3rem; }
+    }
+
+    .letter-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .letter-card-icon { font-size: 1.75rem; }
+
+    .letter-card-title { font-size: 1rem; font-weight: 600; }
+
+    .letter-card-cite {
+      display: inline-block;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--blue);
+      background: #e8f0fe;
+      border-radius: 4px;
+      padding: .15rem .5rem;
+      width: fit-content;
+    }
+
+    .letter-card-desc {
+      font-size: .875rem;
+      color: var(--gray-600);
+      flex: 1;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--gray-900);
+      color: var(--gray-400);
+      padding: 1.5rem 2rem;
+      text-align: center;
+      font-size: .85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <div class="logo-icon">✦</div>
+      Credit Helper
+    </div>
+    <div class="nav-links">
+      <a href="#">← Back to Dashboard</a>
+      <button class="btn btn-outline">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="page-content">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="#">Dashboard</a>
+      <span class="sep">›</span>
+      <span class="current">Step 6</span>
+    </nav>
+
+    <!-- STEP HEADER -->
+    <div class="step-header">
+      <div class="step-pill">6</div>
+      <div class="step-header-text">
+        <h1>Handle Specific Negative Items</h1>
+      </div>
+      <span class="status-badge">Not Started</span>
+      <button class="btn btn-primary">Start Step</button>
+    </div>
+
+    <!-- DETAIL CARD -->
+    <div class="card">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <div class="detail-list">
+        <div class="detail-item">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+        <div class="detail-item">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+        <div class="detail-item">Ut enim ad minim veniam, quis nostrud exercitation ullamco.</div>
+        <div class="detail-item">Hard inquiries: demand proof of authorization.</div>
+      </div>
+    </div>
+
+    <!-- LETTER TYPES -->
+    <div class="section-label">Letter Types</div>
+    <div class="letter-grid">
+
+      <div class="letter-card">
+        <div class="letter-card-icon">🏛️</div>
+        <div class="letter-card-title">Collection Accounts</div>
+        <div class="letter-card-cite">§ 000.000(a)</div>
+        <div class="letter-card-desc">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</div>
+        <button class="btn btn-primary" disabled>Generate Letter</button>
+      </div>
+
+      <div class="letter-card">
+        <div class="letter-card-icon">🏥</div>
+        <div class="letter-card-title">Medical Debt</div>
+        <div class="letter-card-cite">§ 000.000(b)</div>
+        <div class="letter-card-desc">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</div>
+        <button class="btn btn-primary" disabled>Generate Letter</button>
+      </div>
+
+      <div class="letter-card">
+        <div class="letter-card-icon">📅</div>
+        <div class="letter-card-title">Late Payments</div>
+        <div class="letter-card-cite">§ 000.000(c)</div>
+        <div class="letter-card-desc">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.</div>
+        <button class="btn btn-primary" disabled>Generate Letter</button>
+      </div>
+
+      <div class="letter-card">
+        <div class="letter-card-icon">🔍</div>
+        <div class="letter-card-title">Hard Inquiries</div>
+        <div class="letter-card-cite">§ 000.000(d)</div>
+        <div class="letter-card-desc">Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.</div>
+        <button class="btn btn-primary" disabled>Generate Letter</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Credit Helper. Not affiliated with any credit bureau or financial institution.</p>
+  </footer>
+
+</body>
+</html>

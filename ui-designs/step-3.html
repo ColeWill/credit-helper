@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Credit Helper — Step 3: Update Personal Information</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a73e8;
+      --blue-dark: #1558b0;
+      --green: #34a853;
+      --red: #ea4335;
+      --yellow: #fbbc04;
+      --gray-50: #f8f9fa;
+      --gray-100: #f1f3f4;
+      --gray-200: #e8eaed;
+      --gray-400: #bdc1c6;
+      --gray-600: #80868b;
+      --gray-800: #3c4043;
+      --gray-900: #202124;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--gray-900);
+      background: var(--gray-50);
+      line-height: 1.5;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .nav-logo .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a { color: var(--gray-800); font-size: .9rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .55rem 1.25rem;
+      border-radius: 6px;
+      font-size: .9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background .15s, box-shadow .15s;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--blue-dark); text-decoration: none; }
+
+    .btn-outline {
+      background: white;
+      color: var(--blue);
+      border: 1.5px solid var(--blue);
+    }
+    .btn-outline:hover { background: #e8f0fe; text-decoration: none; }
+
+    /* PAGE BODY */
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      font-size: .85rem;
+      color: var(--gray-600);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+
+    .breadcrumb a { color: var(--gray-600); }
+    .breadcrumb a:hover { color: var(--blue); }
+    .breadcrumb .sep { color: var(--gray-400); }
+    .breadcrumb .current { color: var(--gray-900); font-weight: 500; }
+
+    /* STEP HEADER */
+    .step-header {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-header-body { flex: 1; }
+    .step-header-body h1 { font-size: 1.25rem; font-weight: 700; }
+
+    .badge {
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 10px;
+    }
+
+    .badge-in-progress { background: #e8f0fe; color: var(--blue); }
+    .badge-complete { background: #e6f4ea; color: var(--green); }
+    .badge-gray { background: var(--gray-100); color: var(--gray-600); }
+    .badge-sent { background: #e6f4ea; color: var(--green); }
+
+    /* CARDS */
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .75rem;
+    }
+
+    .card p { font-size: .9rem; color: var(--gray-800); }
+    .card p + p { margin-top: .5rem; }
+
+    /* GENERATE LETTERS */
+    .letter-btns {
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .875rem;
+    }
+
+    thead th {
+      text-align: left;
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      color: var(--gray-600);
+      padding: .6rem .75rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    tbody td {
+      padding: .75rem;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-800);
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    .text-gray { color: var(--gray-400); font-style: italic; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      font-size: .8rem;
+      color: var(--gray-600);
+      padding: 2rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <div class="logo-icon">✦</div>
+      Credit Helper
+    </div>
+    <div class="nav-links">
+      <a href="#">← Back to Dashboard</a>
+      <button class="btn btn-outline">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb">
+      <a href="#">Dashboard</a>
+      <span class="sep">›</span>
+      <span class="current">Step 3</span>
+    </nav>
+
+    <!-- STEP HEADER -->
+    <div class="step-header">
+      <div class="step-number">3</div>
+      <div class="step-header-body">
+        <h1>Update Personal Information</h1>
+      </div>
+      <span class="badge badge-in-progress">In Progress</span>
+      <button class="btn btn-primary">Mark Complete</button>
+    </div>
+
+    <!-- DETAIL CARD -->
+    <div class="card">
+      <h2>About This Step</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+
+    <!-- GENERATE LETTERS -->
+    <div class="card">
+      <h2>Generate Letters</h2>
+      <div class="letter-btns">
+        <button class="btn btn-primary">Generate Personal Info Update Letter — Experian</button>
+        <button class="btn btn-primary">Generate Personal Info Update Letter — TransUnion</button>
+        <button class="btn btn-primary">Generate Personal Info Update Letter — Equifax</button>
+      </div>
+    </div>
+
+    <!-- LETTERS SENT TABLE -->
+    <div class="card">
+      <h2>Letters Sent</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Bureau</th>
+            <th>Letter Type</th>
+            <th>Generated</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Experian</td>
+            <td>Personal Info Update</td>
+            <td>May 4, 2025</td>
+            <td><span class="badge badge-sent">Sent</span></td>
+          </tr>
+          <tr>
+            <td>TransUnion</td>
+            <td>Personal Info Update</td>
+            <td class="text-gray">—</td>
+            <td class="text-gray">Not Generated</td>
+          </tr>
+          <tr>
+            <td>Equifax</td>
+            <td>Personal Info Update</td>
+            <td class="text-gray">—</td>
+            <td class="text-gray">Not Generated</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Credit Helper. Not affiliated with any credit bureau or financial institution.</p>
+  </footer>
+
+</body>
+</html>

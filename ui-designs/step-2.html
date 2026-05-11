@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Credit Helper — Step 2: Pull Your Credit Reports</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a73e8;
+      --blue-dark: #1558b0;
+      --green: #34a853;
+      --red: #ea4335;
+      --yellow: #fbbc04;
+      --gray-50: #f8f9fa;
+      --gray-100: #f1f3f4;
+      --gray-200: #e8eaed;
+      --gray-400: #bdc1c6;
+      --gray-600: #80868b;
+      --gray-800: #3c4043;
+      --gray-900: #202124;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--gray-900);
+      background: var(--gray-50);
+      line-height: 1.5;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    .nav-logo .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links a { color: var(--gray-800); font-size: .9rem; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .55rem 1.25rem;
+      border-radius: 6px;
+      font-size: .9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background .15s, box-shadow .15s;
+    }
+
+    .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover { background: var(--blue-dark); text-decoration: none; }
+
+    .btn-outline {
+      background: white;
+      color: var(--blue);
+      border: 1.5px solid var(--blue);
+    }
+    .btn-outline:hover { background: #e8f0fe; text-decoration: none; }
+
+    .btn:disabled, .btn[disabled] {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+    .btn:disabled:hover, .btn[disabled]:hover { background: var(--gray-200); text-decoration: none; }
+
+    .btn-gray {
+      background: var(--gray-200);
+      color: var(--gray-600);
+    }
+
+    /* PAGE WRAPPER */
+    .page { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+    /* BREADCRUMB */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .85rem;
+      color: var(--gray-600);
+      margin-bottom: 1.5rem;
+    }
+    .breadcrumb a { color: var(--gray-600); }
+    .breadcrumb a:hover { color: var(--blue); }
+    .breadcrumb .sep { color: var(--gray-400); }
+    .breadcrumb .current { color: var(--gray-900); font-weight: 500; }
+
+    /* STEP HEADER CARD */
+    .step-header {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .step-number {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-header-body { flex: 1; min-width: 0; }
+    .step-header-body h1 { font-size: 1.35rem; font-weight: 700; margin-bottom: .3rem; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: .2rem .6rem;
+      border-radius: 10px;
+    }
+
+    .status-badge.not-started {
+      background: var(--gray-100);
+      color: var(--gray-600);
+      border: 1px solid var(--gray-200);
+    }
+
+    /* DETAIL CARD */
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .75rem;
+      color: var(--gray-900);
+    }
+
+    .card p { font-size: .9rem; color: var(--gray-600); margin-bottom: .5rem; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* BUREAU GRID */
+    .bureau-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 600px) {
+      .bureau-grid { grid-template-columns: 1fr; }
+    }
+
+    .bureau-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+
+    .bureau-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .bureau-card-name { font-size: .95rem; font-weight: 700; }
+
+    .bureau-card .locked-lines {
+      display: flex;
+      flex-direction: column;
+      gap: .45rem;
+    }
+
+    .locked-line {
+      height: 10px;
+      background: var(--gray-200);
+      border-radius: 4px;
+    }
+
+    /* CALLOUT */
+    .callout {
+      background: #e8f0fe;
+      border: 1px solid #c5d8fb;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      font-size: .875rem;
+      color: var(--gray-800);
+      margin-bottom: 1.25rem;
+    }
+
+    .callout strong { color: var(--blue); }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      font-size: .8rem;
+      color: var(--gray-600);
+      padding: 2rem;
+      border-top: 1px solid var(--gray-200);
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">
+      <div class="logo-icon">✦</div>
+      Credit Helper
+    </div>
+    <div class="nav-links">
+      <a href="#">← Back to Dashboard</a>
+      <button class="btn btn-outline">Sign Out</button>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <!-- BREADCRUMB -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="#">Dashboard</a>
+      <span class="sep">›</span>
+      <span class="current">Step 2</span>
+    </nav>
+
+    <!-- STEP HEADER -->
+    <div class="step-header">
+      <div class="step-number">2</div>
+      <div class="step-header-body">
+        <h1>Pull Your Credit Reports</h1>
+        <span class="status-badge not-started">● Not Started</span>
+      </div>
+      <button class="btn btn-primary">Start Step</button>
+    </div>
+
+    <!-- DETAIL CARD -->
+    <div class="card">
+      <h2>About This Step</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      <p>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    </div>
+
+    <!-- BUREAU REPORTS -->
+    <div class="card" style="padding-bottom:1.25rem;">
+      <h2>Bureau Reports</h2>
+      <div class="bureau-grid">
+
+        <div class="bureau-card">
+          <div class="bureau-card-header">
+            <span class="bureau-card-name">Experian</span>
+            <span class="status-badge not-started">Not Pulled</span>
+          </div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:90%"></div>
+            <div class="locked-line" style="width:75%"></div>
+            <div class="locked-line" style="width:60%"></div>
+          </div>
+          <button class="btn btn-gray" disabled>View Report Notes</button>
+        </div>
+
+        <div class="bureau-card">
+          <div class="bureau-card-header">
+            <span class="bureau-card-name">TransUnion</span>
+            <span class="status-badge not-started">Not Pulled</span>
+          </div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:85%"></div>
+            <div class="locked-line" style="width:70%"></div>
+            <div class="locked-line" style="width:55%"></div>
+          </div>
+          <button class="btn btn-gray" disabled>View Report Notes</button>
+        </div>
+
+        <div class="bureau-card">
+          <div class="bureau-card-header">
+            <span class="bureau-card-name">Equifax</span>
+            <span class="status-badge not-started">Not Pulled</span>
+          </div>
+          <div class="locked-lines">
+            <div class="locked-line" style="width:80%"></div>
+            <div class="locked-line" style="width:65%"></div>
+            <div class="locked-line" style="width:50%"></div>
+          </div>
+          <button class="btn btn-gray" disabled>View Report Notes</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CALLOUT -->
+    <div class="callout">
+      <strong>Tip:</strong> You can request free reports at
+      <a href="#" target="_blank" rel="noopener">ExampleCreditReport.com</a>.
+      You are entitled to one free report per bureau per year.
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 Credit Helper. Not affiliated with any credit bureau or financial institution.
+  </footer>
+
+</body>
+</html>
